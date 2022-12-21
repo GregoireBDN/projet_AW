@@ -1,16 +1,24 @@
 package unite;
 
-import arme.Missile;
 import arme.MitrailleuseLegere;
 import locomoton.APied;
-import locomoton.Aerien;
+import outil.Joueur;
 
 public class Infanterie extends Unite {
 	public Infanterie() {
 		this.a = new MitrailleuseLegere();
 		this.deplacement = 3;
 		this.locomotion = new APied();
+		this.prix = EnumUnites.Infanterie.getPrix();
 	}
+	public Infanterie(Joueur joueur) {
+		this.joueur = joueur;
+		this.a = new MitrailleuseLegere();
+		this.deplacement = 3;
+		this.locomotion = new APied();
+		this.prix = EnumUnites.Infanterie.getPrix();
+	}
+	
 
 	@Override
 	public void resetDeplacement() {

@@ -10,7 +10,8 @@ public class ChoisirChemin extends Etats {
 	int curseurXMemo;
 	int curseurYMemo;
 
-	public ChoisirChemin(Case[][] grille, int x, int y, Unite u) {
+	public ChoisirChemin(Case[][] grille, int x, int y, Unite u, Joueur joueur) {
+		this.joueur = joueur;
 		this.uniteCourante = u;
 		this.curseurX = x;
 		this.curseurY = y;
@@ -92,7 +93,7 @@ public class ChoisirChemin extends Etats {
 	public Etats actionEchap() {
 		supprimeFlecheComplete();
 		uniteCourante.resetDeplacement();
-		return new DeplacementLibre(grille, curseurXMemo, curseurYMemo);
+		return new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur);
 	}
 
 	@Override
@@ -102,7 +103,8 @@ public class ChoisirChemin extends Etats {
 				|| grille[curseurY][curseurX].equals(grille[curseurYMemo][curseurXMemo])) {
 			if (ennemisAPorter()) {
 				uniteCourante.ajoutAction(ActionsUnites.attaque.name());
-			}if(actionCapture()) {
+			}
+			if (actionCapture()) {
 				uniteCourante.ajoutAction(ActionsUnites.capture.name());
 			}
 			grille[curseurYMemo][curseurXMemo].setUnite(null);
@@ -110,25 +112,27 @@ public class ChoisirChemin extends Etats {
 			supprimeFlecheComplete();
 			int action = Affichage.popup("Choisire une action", grille[curseurY][curseurX].unite.getActions(), true, 0);
 			String[] actionsCourante = uniteCourante.getActions();
-			
+
 			if (action == -1) {
 				grille[curseurYMemo][curseurXMemo].setUnite(uniteCourante);
 				grille[curseurY][curseurX].setUnite(null);
-				e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo);
+				e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur);
 			} else if (action > 0) {
-				if(actionsCourante[action].equals(ActionsUnites.attaque.name())) {
-					e = new Attaque(grille, curseurX, curseurY, uniteCourante);
-				}else {
-					Propriete propriete= grille[curseurY][curseurX].getTerrain() instanceof Propriete? (Propriete)grille[curseurY][curseurX].getTerrain():null ;
+				if (actionsCourante[action].equals(ActionsUnites.attaque.name())) {
+					e = new Attaque(grille, curseurX, curseurY, uniteCourante, joueur);
+				} else {
+					Propriete propriete = grille[curseurY][curseurX].getTerrain() instanceof Propriete
+							? (Propriete) grille[curseurY][curseurX].getTerrain()
+							: null;
 					propriete.setResistance(uniteCourante.captureProp(propriete));
-					if(propriete.getResistance() <= 0) {
+					if (propriete.getResistance() <= 0) {
 						propriete.setJoueur(uniteCourante.getJoueur());
 					}
-					e = new DeplacementLibre(grille, curseurX, curseurY);
+					e = new DeplacementLibre(grille, curseurX, curseurY, joueur);
 				}
-				
+
 			} else {
-				e = new DeplacementLibre(grille, curseurX, curseurY);
+				e = new DeplacementLibre(grille, curseurX, curseurY, joueur);
 			}
 			uniteCourante.rstAction();
 			uniteCourante.resetDeplacement();
@@ -137,9 +141,11 @@ public class ChoisirChemin extends Etats {
 		}
 		return e;
 	}
-	
+
 	public boolean actionCapture() {
-		Propriete propriete= grille[curseurY][curseurX].getTerrain() instanceof Propriete? (Propriete)grille[curseurY][curseurX].getTerrain():null ;
+		Propriete propriete = grille[curseurY][curseurX].getTerrain() instanceof Propriete
+				? (Propriete) grille[curseurY][curseurX].getTerrain()
+				: null;
 		return uniteCourante.getLocomotion() instanceof APied && propriete != null
 				&& propriete.getJoueur() != uniteCourante.getJoueur();
 	}

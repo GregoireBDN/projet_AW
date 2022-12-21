@@ -7,7 +7,8 @@ public class Attaque extends Etats {
 	int curseurXMemo;
 	int curseurYMemo;
 
-	public Attaque(Case[][] grille, int x, int y, Unite u) {
+	public Attaque(Case[][] grille, int x, int y, Unite u, Joueur joueur) {
+		this.joueur =joueur;
 		this.curseurX = x;
 		this.curseurY = y;
 		this.curseurXMemo = x;
@@ -64,14 +65,14 @@ public class Attaque extends Etats {
 				uniteCourante.setPv(grille[curseurY][curseurX].unite.infligeDegat(uniteCourante));
 				estMort(uniteCourante);
 			}
-			e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo);
+			e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur);
 		}
 		return e;
 	}
 
 	@Override
 	public Etats actionEchap() {
-		return new DeplacementLibre(grille, curseurX, curseurY);
+		return new DeplacementLibre(grille, curseurX, curseurY,joueur);
 	}
 
 	public boolean estMort(Unite uniteCoutante) {

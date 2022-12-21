@@ -3,6 +3,7 @@ package outil;
 public abstract class Etats {
 	int curseurX;
 	int curseurY;
+	Joueur joueur;
 	Case[][] grille;
 
 	public abstract void actionGauche();

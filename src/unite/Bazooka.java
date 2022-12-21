@@ -1,11 +1,21 @@
 package unite;
 import arme.*;
 import locomoton.APied;
+import outil.Joueur;
 public class Bazooka extends Unite {
 	public Bazooka() {
 		this.a = new Canon();
 		this.deplacement = 2;
 		this.locomotion = new APied();
+		this.prix = EnumUnites.Bazouka.getPrix();
+	}
+	
+	public Bazooka(Joueur joueur) {
+		this.joueur = joueur;
+		this.a = new Canon();
+		this.deplacement = 2;
+		this.locomotion = new APied();
+		this.prix = EnumUnites.Bazouka.getPrix();
 	}
 
 	@Override

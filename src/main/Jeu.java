@@ -37,7 +37,7 @@ public class Jeu {
 				System.out.println();
 			}
 		}
-		etat = new DeplacementLibre(grille, 0, 0);
+		etat = new DeplacementLibre(grille, 0, 0, joueur1);
 		
 
 		for (int i = 0; i < grille.length; i++) {
