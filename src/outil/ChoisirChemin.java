@@ -119,7 +119,12 @@ public class ChoisirChemin extends Etats {
 				if(actionsCourante[action].equals(ActionsUnites.attaque.name())) {
 					e = new Attaque(grille, curseurX, curseurY, uniteCourante);
 				}else {
-					//ToDo gérer action capture
+					Propriete propriete= grille[curseurY][curseurX].getTerrain() instanceof Propriete? (Propriete)grille[curseurY][curseurX].getTerrain():null ;
+					propriete.setResistance(uniteCourante.captureProp(propriete));
+					if(propriete.getResistance() <= 0) {
+						propriete.setJoueur(uniteCourante.getJoueur());
+					}
+					e = new DeplacementLibre(grille, curseurX, curseurY);
 				}
 				
 			} else {

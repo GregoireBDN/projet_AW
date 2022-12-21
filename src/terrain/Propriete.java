@@ -5,7 +5,7 @@ import locomoton.Locomotion;
 public class Propriete extends Terrain {
 	
 	int joueur;
-	int resistance;
+	double resistance;
 	
 	public Propriete() {
 		this.resistance = 20;
@@ -24,11 +24,11 @@ public class Propriete extends Terrain {
 		return 1;
 	}
 
-	public int getResistance() {
+	public double getResistance() {
 		return resistance;
 	}
 
-	public void setResistance(int resistance) {
+	public void setResistance(double resistance) {
 		this.resistance = resistance;
 	}
 	

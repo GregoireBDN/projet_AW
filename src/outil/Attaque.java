@@ -56,14 +56,12 @@ public class Attaque extends Etats {
 		Etats e = this;
 		if (grille[curseurY][curseurX].aUneUniteeEnemie(uniteCourante)) {
 			System.out.println("Touche ENTER");
-			grille[curseurY][curseurX].unite.setPv(grille[curseurY][curseurX].unite.getPv()
-					- uniteCourante.infligeDegat(grille[curseurY][curseurX].unite));
+			grille[curseurY][curseurX].unite.setPv(uniteCourante.infligeDegat(grille[curseurY][curseurX].unite));
 			if (!estMort(grille[curseurY][curseurX].unite)) {
 				System.out.println(grille[curseurY][curseurX].unite.toString() + "(Joueur : "
 						+ grille[curseurY][curseurX].unite.getJoueur() + ")" + " : "
 						+ grille[curseurY][curseurX].unite.getPv());
-				uniteCourante
-						.setPv(uniteCourante.getPv() - grille[curseurY][curseurX].unite.infligeDegat(uniteCourante));
+				uniteCourante.setPv(grille[curseurY][curseurX].unite.infligeDegat(uniteCourante));
 				estMort(uniteCourante);
 			}
 			e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo);
