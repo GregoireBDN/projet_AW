@@ -4,7 +4,9 @@ public class Joueur {
 int indiceJoueur;
 int credit;
 
-public Joueur
+public Joueur() {
+	this.indiceJoueur = 0;
+}
 
 public Joueur(int indice) {
 	this.indiceJoueur = indice;
