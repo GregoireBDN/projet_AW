@@ -1,21 +1,22 @@
 package terrain;
 
 import locomoton.Locomotion;
+import outil.Joueur;
 
 public class Propriete extends Terrain {
 	
-	int joueur;
+	Joueur joueur;
 	double resistance;
 	
 	public Propriete() {
 		this.resistance = 20;
 	}
 
-	public int getJoueur() {
+	public Joueur getJoueur() {
 		return joueur;
 	}
 
-	public void setJoueur(int joueur) {
+	public void setJoueur(Joueur joueur) {
 		this.joueur = joueur;
 	}
 

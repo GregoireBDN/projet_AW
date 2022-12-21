@@ -16,11 +16,15 @@ import ressources.Chemins;
 public class Jeu {
 	Etats etat;
 	Case[][] grille;
+	Joueur joueur1;
+	Joueur joueur2;
 	private int indexJoueurActif; // l'indice du joueur actif: 1 = rouge, 2 = bleu
 	// l'indice 0 est reserve au neutre, qui ne joue pas mais peut posseder des
 	// proprietes
 
 	public Jeu(String fileName) throws Exception {
+		joueur1 = new Joueur(1);
+		joueur2 = new Joueur(2);
 		String[][] carteString = ParseurCartes.parseCarte(fileName);
 		grille = new Case[carteString.length][carteString[0].length];
 		for (int i = 0; i < grille.length; i++) {
@@ -62,19 +66,17 @@ public class Jeu {
 		Affichage.afficheTexteDescriptif("Status du jeu");
 	}
 
-	public int stringToJoueur(String info) {
-		int joueur = -1;
-		if (info.equals("0")) {
-			joueur = 0;
-		} else if (info.equals("1")) {
-			joueur = 1;
+	public Joueur stringToJoueur(String info) {
+		Joueur joueur = new Joueur();
+		if (info.equals("1")) {
+			joueur = joueur1;
 		} else if (info.equals("2")) {
-			joueur = 2;
+			joueur = joueur2;
 		}
 		return joueur;
 	}
 
-	public void associeUnite(Case courante, String info, int joueur) {
+	public void associeUnite(Case courante, String info, Joueur joueur) {
 		if (info.equals("Artillerie")) {
 			courante.setUnite(new Artillerie());
 			courante.getUnite().setJoueur(joueur);
@@ -169,25 +171,25 @@ public class Jeu {
 	public void drowUnite(Case courante) {
 		if (courante.getUnite() instanceof Artillerie) {
 			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur(), true, Chemins.FICHIER_ARTILLERIE));
+					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_ARTILLERIE));
 		} else if (courante.getUnite() instanceof Bazooka) {
 			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur(), true, Chemins.FICHIER_BAZOOKA));
+					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_BAZOOKA));
 		} else if (courante.getUnite() instanceof Bombardier) {
 			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur(), true, Chemins.FICHIER_BOMBARDIER));
+					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_BOMBARDIER));
 		} else if (courante.getUnite() instanceof Helicoptere) {
 			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur(), true, Chemins.FICHIER_HELICOPTERE));
+					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_HELICOPTERE));
 		} else if (courante.getUnite() instanceof Infanterie) {
 			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur(), true, Chemins.FICHIER_INFANTERIE));
+					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_INFANTERIE));
 		} else if (courante.getUnite() instanceof Tank) {
 			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur(), true, Chemins.FICHIER_TANK));
+					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_TANK));
 		} else if (courante.getUnite() instanceof Dca) {
 			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur(), true, Chemins.FICHIER_ANTIAIR));
+					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_ANTIAIR));
 		}
 	}
 
@@ -215,19 +217,19 @@ public class Jeu {
 		} else if (courante.getTerrain() instanceof Qg) {
 			Propriete p = (Propriete) courante.getTerrain();
 			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminPropriete(Chemins.FICHIER_QG, p.getJoueur()));
+					Chemins.getCheminPropriete(Chemins.FICHIER_QG, p.getJoueur().getIndiceJoueur()));
 			drowUnite(courante);
 			drowFleche(courante);
 		} else if (courante.getTerrain() instanceof Usine) {
 			Propriete p = (Propriete) courante.getTerrain();
 			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminPropriete(Chemins.FICHIER_USINE, p.getJoueur()));
+					Chemins.getCheminPropriete(Chemins.FICHIER_USINE, p.getJoueur().getIndiceJoueur()));
 			drowUnite(courante);
 			drowFleche(courante);
 		} else if (courante.getTerrain() instanceof Ville) {
 			Propriete p = (Propriete) courante.getTerrain();
 			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminPropriete(Chemins.FICHIER_VILLE, p.getJoueur()));
+					Chemins.getCheminPropriete(Chemins.FICHIER_VILLE, p.getJoueur().getIndiceJoueur()));
 			drowUnite(courante);
 			drowFleche(courante);
 		}

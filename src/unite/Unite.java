@@ -3,13 +3,14 @@ package unite;
 import arme.*;
 import locomoton.*;
 import outil.ActionsUnites;
+import outil.Joueur;
 import terrain.Propriete;
 
 public abstract class Unite {
 	double pv;
 	Locomotion locomotion;
 	int prix;
-	int joueur;
+	Joueur joueur;
 	Arme a;
 	String[] actions;
 	int deplacement;
@@ -44,11 +45,11 @@ public abstract class Unite {
 		this.prix = prix;
 	}
 
-	public int getJoueur() {
+	public Joueur getJoueur() {
 		return joueur;
 	}
 
-	public void setJoueur(int joueur) {
+	public void setJoueur(Joueur joueur) {
 		this.joueur = joueur;
 	}
 
