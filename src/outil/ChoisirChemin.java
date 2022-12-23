@@ -123,7 +123,7 @@ public class ChoisirChemin extends Etats {
 				e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur, false, isOver);
 			} else if (action > 0) {
 				if (actionsCourante[action].equals(ActionsUnites.attaque.name())) {
-					e = new Attaque(grille, curseurX, curseurY, uniteCourante, joueur);
+					e = new Attaque(grille, curseurX, curseurY, uniteCourante, joueur, isOver);
 				} else {
 					Propriete propriete = grille[curseurY][curseurX].getTerrain() instanceof Propriete
 							? (Propriete) grille[curseurY][curseurX].getTerrain()

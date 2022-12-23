@@ -60,7 +60,7 @@ public class DeplacementLibre extends Etats {
 			if (grille[curseurY][curseurX].unite != null && grille[curseurY][curseurX].unite.getJoueur().equals(joueur)
 					&& !grille[curseurY][curseurX].unite.isUtiliser()) {
 				e = new ChoisirChemin(grille, curseurX, curseurY, grille[curseurY][curseurX].unite, joueur, isOver);
-			} else if (grille[curseurY][curseurX].terrain instanceof Usine) {
+			} else if (grille[curseurY][curseurX].terrain instanceof Usine && !grille[curseurY][curseurX].aUneUnite()) {
 				Propriete propriete = (Propriete) grille[curseurY][curseurX].terrain;
 				if (propriete.getJoueur().equals(joueur)) {
 					String[] option = new String[EnumUnites.getUnites().length];

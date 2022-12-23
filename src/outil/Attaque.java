@@ -7,7 +7,8 @@ public class Attaque extends Etats {
 	int curseurXMemo;
 	int curseurYMemo;
 
-	public Attaque(Case[][] grille, int x, int y, Unite u, Joueur joueur) {
+	public Attaque(Case[][] grille, int x, int y, Unite u, Joueur joueur, boolean isOver) {
+		this.isOver = isOver;
 		this.joueur = joueur;
 		this.curseurX = x;
 		this.curseurY = y;

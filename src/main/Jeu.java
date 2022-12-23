@@ -16,6 +16,7 @@ public class Jeu {
 	Case[][] grille;
 	Joueur joueur1;
 	Joueur joueur2;
+
 	public Jeu(String fileName) throws Exception {
 		joueur1 = new Joueur(1);
 		joueur2 = new Joueur(2);
@@ -33,7 +34,6 @@ public class Jeu {
 				System.out.println();
 			}
 		}
-		
 
 		for (int i = 0; i < grille.length; i++) {
 			for (int j = 0; j < grille[0].length; j++) {
@@ -46,14 +46,14 @@ public class Jeu {
 			}
 			System.out.println();
 		}
-		
+
 		etat = new DeplacementLibre(grille, 0, 0, joueur1, true, false);
 
 		Config.setDimension(carteString[0].length, carteString.length);
 	}
 
 	public boolean isOver() {
-		return false;
+		return etat.isOver();
 	}
 
 	public void afficheStatutJeu() {
@@ -72,27 +72,37 @@ public class Jeu {
 	}
 
 	public void associeUnite(Case courante, String info, Joueur joueur) {
-		if (info.equals("Artillerie")) {
+		switch (info) {
+		case "Artillerie":
+			break;
+		case "Bazooka":
 			courante.setUnite(new Artillerie());
 			courante.getUnite().setJoueur(joueur);
-		} else if (info.equals("Bazooka")) {
-			courante.setUnite(new Bazooka());
-			courante.getUnite().setJoueur(joueur);
-		} else if (info.equals("Bombardier")) {
+			break;
+		case "Bombardier":
 			courante.setUnite(new Bombardier());
 			courante.getUnite().setJoueur(joueur);
-		} else if (info.equals("DCA")) {
+			break;
+		case "DCA":
 			courante.setUnite(new Dca());
 			courante.getUnite().setJoueur(joueur);
-		} else if (info.equals("Helicoptere")) {
+			break;
+		case "Helico":
 			courante.setUnite(new Helicoptere());
 			courante.getUnite().setJoueur(joueur);
-		} else if (info.equals("Infanterie")) {
+			break;
+		case "Infanterie":
 			courante.setUnite(new Infanterie());
 			courante.getUnite().setJoueur(joueur);
-		} else if (info.equals("Tank")) {
+			break;
+		case "Tank":
 			courante.setUnite(new Tank());
 			courante.getUnite().setJoueur(joueur);
+			break;
+		case "Convoit":
+			break;
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + info);
 		}
 	}
 
@@ -100,39 +110,60 @@ public class Jeu {
 		String terrain = info.split(":")[0].split(";")[0];
 		String[] unite = info.split(":")[0].split(";");
 		String[] joueur = info.split(":");
+		Propriete propriete;
 
-		if (terrain.equals("Eau")) {
+		switch (terrain) {
+
+		case "Eau":
 			courante.setTerrain(new Eau());
 			if (aUneUnite(unite)) {
 				associeUnite(courante, unite[1], stringToJoueur(joueur[1]));
 			}
-		} else if (terrain.equals("Foret")) {
+			break;
+		case "Foret":
 			courante.setTerrain(new Foret());
 			if (aUneUnite(unite)) {
 				associeUnite(courante, unite[1], stringToJoueur(joueur[1]));
 			}
-		} else if (terrain.equals("Montagne")) {
+			break;
+		case "Montagne":
 			courante.setTerrain(new Montagne());
 			if (aUneUnite(unite)) {
 				associeUnite(courante, unite[1], stringToJoueur(joueur[1]));
 			}
-		} else if (terrain.equals("Plaine")) {
+			break;
+		case "Plaine":
 			courante.setTerrain(new Plaine());
 			if (aUneUnite(unite)) {
 				associeUnite(courante, unite[1], stringToJoueur(joueur[1]));
 			}
-		} else if (terrain.equals("QG")) {
+			break;
+		case "QG":
 			courante.setTerrain(new Qg());
-			Propriete p = (Propriete) courante.getTerrain();
-			p.setJoueur(stringToJoueur(joueur[1]));
-		} else if (terrain.equals("Usine")) {
+			propriete = (Propriete) courante.getTerrain();
+			propriete.setJoueur(stringToJoueur(joueur[1]));
+			if (aUneUnite(unite)) {
+				associeUnite(courante, unite[1], stringToJoueur(joueur[1]));
+			}
+			break;
+		case "Usine":
 			courante.setTerrain(new Usine());
-			Propriete p = (Propriete) courante.getTerrain();
-			p.setJoueur(stringToJoueur(joueur[1]));
-		} else if (terrain.equals("Ville")) {
+			propriete = (Propriete) courante.getTerrain();
+			propriete.setJoueur(stringToJoueur(joueur[1]));
+			if (aUneUnite(unite)) {
+				associeUnite(courante, unite[1], stringToJoueur(joueur[1]));
+			}
+			break;
+		case "Ville":
 			courante.setTerrain(new Ville());
-			Propriete p = (Propriete) courante.getTerrain();
-			p.setJoueur(stringToJoueur(joueur[1]));
+			propriete = (Propriete) courante.getTerrain();
+			propriete.setJoueur(stringToJoueur(joueur[1]));
+			if (aUneUnite(unite)) {
+				associeUnite(courante, unite[1], stringToJoueur(joueur[1]));
+			}
+			break;
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + terrain);
 		}
 	}
 
@@ -146,7 +177,7 @@ public class Jeu {
 		for (int i = 0; i < grille.length; i++) {
 			for (int j = 0; j < grille[i].length; j++) {
 				Case caseCourante = grille[i][j];
-				drowCase(caseCourante);
+				drowCases(caseCourante);
 			}
 		}
 
@@ -188,7 +219,7 @@ public class Jeu {
 		}
 	}
 
-	public void drowCase(Case courante) {
+	public void drowCases(Case courante) {
 		if (courante.getTerrain() instanceof Eau) {
 			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
 					Chemins.getCheminTerrain(Chemins.FICHIER_EAU));

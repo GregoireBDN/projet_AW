@@ -34,6 +34,9 @@ public abstract class Etats {
 	public int getCurseurY() {
 		return curseurY;
 	}
+	public boolean isOver() {
+		return this.isOver;
+	}
 
 	public void setCurseurY(int curseurY) {
 		this.curseurY = curseurY;
