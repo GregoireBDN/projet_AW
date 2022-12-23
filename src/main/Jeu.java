@@ -29,7 +29,7 @@ public class Jeu {
 				Case caseCourante = grille[i][j] = new Case();
 				caseCourante.setX(j);
 				caseCourante.setY(i);
-				caseCourante.setFleche(new Fleche());
+				caseCourante.setFleche(new ElementFleche());
 				associeCase(caseCourante, carteString[i][j]);
 				System.out.println();
 			}

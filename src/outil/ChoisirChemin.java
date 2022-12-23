@@ -21,7 +21,7 @@ public class ChoisirChemin extends Etats {
 		this.curseurYMemo = y;
 		this.grille = grille;
 		uniteCourante.setUtiliser(true);
-		grille[curseurY][curseurX].setFleche(new Fleche("begin", "end"));
+		grille[curseurY][curseurX].setFleche(new ElementFleche("begin", "end", null));
 		System.out.println("Choisie le Chemin : " + uniteCourante.toString() + "(Joueur : " + uniteCourante.getJoueur()
 				+ ")" + "\n PV : " + uniteCourante.getPv() + "\n Deplacement : " + uniteCourante.getDeplacement());
 	}
@@ -32,11 +32,18 @@ public class ChoisirChemin extends Etats {
 			if (!grille[curseurY][curseurX].fleche.getDepart().equals("left")) {
 				grille[curseurY][curseurX].fleche.setArriver("left");
 			}
+			grille[curseurY][curseurX - 1].getFleche().setPrecedent(grille[curseurY][curseurX].getFleche());
 			curseurX--;
-			grille[curseurY][curseurX].incrDeplacement(uniteCourante);
+			grille[curseurY][curseurX].decreDeplacement(uniteCourante);
 			grille[curseurY][curseurX].fleche.setDepart("right");
 			grille[curseurY][curseurX].fleche.setArriver("end");
 			System.out.println("Deplacement restant : " + uniteCourante.getDeplacement());
+		} else if (grille[curseurY][curseurX].getFleche().getPrecedent()
+				.equals(grille[curseurY][curseurX - 1].getFleche())) {
+			grille[curseurY][curseurX].setFleche(new ElementFleche());
+			curseurX--;
+			grille[curseurY][curseurX].inecDeplacement(uniteCourante);
+			grille[curseurY][curseurX].getFleche().setArriver("end");
 		}
 	}
 
@@ -46,11 +53,18 @@ public class ChoisirChemin extends Etats {
 			if (!grille[curseurY][curseurX].fleche.getDepart().equals("right")) {
 				grille[curseurY][curseurX].fleche.setArriver("right");
 			}
+			grille[curseurY][curseurX + 1].getFleche().setPrecedent(grille[curseurY][curseurX].getFleche());
 			curseurX++;
-			grille[curseurY][curseurX].incrDeplacement(uniteCourante);
+			grille[curseurY][curseurX].decreDeplacement(uniteCourante);
 			grille[curseurY][curseurX].fleche.setArriver("end");
 			grille[curseurY][curseurX].fleche.setDepart("left");
 			System.out.println("Deplacement restant : " + uniteCourante.getDeplacement());
+		} else if (grille[curseurY][curseurX].getFleche().getPrecedent()
+				.equals(grille[curseurY][curseurX + 1].getFleche())) {
+			grille[curseurY][curseurX].setFleche(new ElementFleche());
+			curseurX++;
+			grille[curseurY][curseurX].inecDeplacement(uniteCourante);
+			grille[curseurY][curseurX].getFleche().setArriver("end");
 		}
 	}
 
@@ -60,12 +74,18 @@ public class ChoisirChemin extends Etats {
 			if (!grille[curseurY][curseurX].fleche.getDepart().equals("down")) {
 				grille[curseurY][curseurX].fleche.setArriver("down");
 			}
-			;
+			grille[curseurY - 1][curseurX].getFleche().setPrecedent(grille[curseurY][curseurX].getFleche());
 			curseurY--;
-			grille[curseurY][curseurX].incrDeplacement(uniteCourante);
+			grille[curseurY][curseurX].decreDeplacement(uniteCourante);
 			grille[curseurY][curseurX].fleche.setDepart("up");
 			grille[curseurY][curseurX].fleche.setArriver("end");
 			System.out.println("Deplacement restant : " + uniteCourante.getDeplacement());
+		} else if (grille[curseurY][curseurX].getFleche().getPrecedent()
+				.equals(grille[curseurY - 1][curseurX].getFleche())) {
+			grille[curseurY][curseurX].setFleche(new ElementFleche());
+			curseurY--;
+			grille[curseurY][curseurX].inecDeplacement(uniteCourante);
+			grille[curseurY][curseurX].getFleche().setArriver("end");
 		}
 	}
 
@@ -76,11 +96,18 @@ public class ChoisirChemin extends Etats {
 			if (!grille[curseurY][curseurX].fleche.getDepart().equals("up")) {
 				grille[curseurY][curseurX].fleche.setArriver("up");
 			}
+			grille[curseurY + 1][curseurX].getFleche().setPrecedent(grille[curseurY][curseurX].getFleche());
 			curseurY++;
-			grille[curseurY][curseurX].incrDeplacement(uniteCourante);
+			grille[curseurY][curseurX].decreDeplacement(uniteCourante);
 			grille[curseurY][curseurX].fleche.setDepart("down");
 			grille[curseurY][curseurX].fleche.setArriver("end");
 			System.out.println("Deplacement restant : " + uniteCourante.getDeplacement());
+		} else if (grille[curseurY][curseurX].getFleche().getPrecedent()
+				.equals(grille[curseurY + 1][curseurX].getFleche())) {
+			grille[curseurY][curseurX].setFleche(new ElementFleche());
+			curseurY++;
+			grille[curseurY][curseurX].inecDeplacement(uniteCourante);
+			grille[curseurY][curseurX].getFleche().setArriver("end");
 		}
 	}
 
@@ -131,7 +158,7 @@ public class ChoisirChemin extends Etats {
 					propriete.setResistance(uniteCourante.captureProp(propriete));
 					if (propriete.getResistance() <= 0) {
 						propriete.setJoueur(uniteCourante.getJoueur());
-						if(propriete instanceof Qg) {
+						if (propriete instanceof Qg) {
 							isOver = true;
 							System.out.println("Partie terminé! Le Joueur " + joueur.getIndiceJoueur() + " à gagné!");
 						}

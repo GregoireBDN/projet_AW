@@ -10,7 +10,7 @@ public class Case {
 	int x;
 	int y;
 	Unite unite;
-	Fleche fleche;
+	ElementFleche fleche;
 
 	public Terrain getTerrain() {
 		return terrain;
@@ -52,7 +52,7 @@ public class Case {
 		return unite != null && unite.getJoueur() != u.getJoueur();
 	}
 
-	public Fleche getFleche() {
+	public ElementFleche getFleche() {
 		return fleche;
 	}
 
@@ -60,7 +60,7 @@ public class Case {
 		return fleche.depart != null;
 	}
 
-	public void setFleche(Fleche fleche) {
+	public void setFleche(ElementFleche fleche) {
 		this.fleche = fleche;
 	}
 
@@ -74,9 +74,16 @@ public class Case {
 				&& this.terrain.CoupDeDeplacement(u.getLocomotion()) <= u.getDeplacement();
 	}
 	
-	public void incrDeplacement(Unite u) {
+	public void decreDeplacement(Unite u) {
 		u.setDeplacement(
 				u.getDeplacement() - terrain.CoupDeDeplacement(u.getLocomotion()));
 	}
+	
+	public void inecDeplacement(Unite u) {
+		u.setDeplacement(
+				u.getDeplacement() + terrain.CoupDeDeplacement(u.getLocomotion()));
+	}
+	
+	
 
 }
