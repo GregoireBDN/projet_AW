@@ -3,6 +3,7 @@ package outil;
 import locomoton.*;
 import ressources.*;
 import terrain.Propriete;
+import terrain.Qg;
 import unite.*;
 
 public class ChoisirChemin extends Etats {
@@ -10,7 +11,8 @@ public class ChoisirChemin extends Etats {
 	int curseurXMemo;
 	int curseurYMemo;
 
-	public ChoisirChemin(Case[][] grille, int x, int y, Unite u, Joueur joueur) {
+	public ChoisirChemin(Case[][] grille, int x, int y, Unite u, Joueur joueur, boolean isOver) {
+		this.isOver = isOver;
 		this.joueur = joueur;
 		this.uniteCourante = u;
 		this.curseurX = x;
@@ -18,6 +20,7 @@ public class ChoisirChemin extends Etats {
 		this.curseurXMemo = x;
 		this.curseurYMemo = y;
 		this.grille = grille;
+		uniteCourante.setUtiliser(true);
 		grille[curseurY][curseurX].setFleche(new Fleche("begin", "end"));
 		System.out.println("Choisie le Chemin : " + uniteCourante.toString() + "(Joueur : " + uniteCourante.getJoueur()
 				+ ")" + "\n PV : " + uniteCourante.getPv() + "\n Deplacement : " + uniteCourante.getDeplacement());
@@ -92,8 +95,8 @@ public class ChoisirChemin extends Etats {
 	@Override
 	public Etats actionEchap() {
 		supprimeFlecheComplete();
-		uniteCourante.resetDeplacement();
-		return new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur);
+		uniteCourante.resetUnite();
+		return new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur, false, isOver);
 	}
 
 	@Override
@@ -114,9 +117,10 @@ public class ChoisirChemin extends Etats {
 			String[] actionsCourante = uniteCourante.getActions();
 
 			if (action == -1) {
+				uniteCourante.resetUnite();
 				grille[curseurYMemo][curseurXMemo].setUnite(uniteCourante);
 				grille[curseurY][curseurX].setUnite(null);
-				e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur);
+				e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur, false, isOver);
 			} else if (action > 0) {
 				if (actionsCourante[action].equals(ActionsUnites.attaque.name())) {
 					e = new Attaque(grille, curseurX, curseurY, uniteCourante, joueur);
@@ -127,15 +131,17 @@ public class ChoisirChemin extends Etats {
 					propriete.setResistance(uniteCourante.captureProp(propriete));
 					if (propriete.getResistance() <= 0) {
 						propriete.setJoueur(uniteCourante.getJoueur());
+						if(propriete instanceof Qg) {
+							isOver = true;
+							System.out.println("Partie terminé! Le Joueur " + joueur.getIndiceJoueur() + " à gagné!");
+						}
 					}
-					e = new DeplacementLibre(grille, curseurX, curseurY, joueur);
+					e = new DeplacementLibre(grille, curseurX, curseurY, joueur, false, isOver);
 				}
 
 			} else {
-				e = new DeplacementLibre(grille, curseurX, curseurY, joueur);
+				e = new DeplacementLibre(grille, curseurX, curseurY, joueur, false, isOver);
 			}
-			uniteCourante.rstAction();
-			uniteCourante.resetDeplacement();
 		} else {
 			e = this;
 		}
@@ -156,6 +162,11 @@ public class ChoisirChemin extends Etats {
 				|| curseurX > 0 && grille[curseurY][curseurX - 1].aUneUniteeEnemie(uniteCourante)
 				|| curseurX < grille[curseurY].length - 1
 						&& grille[curseurY][curseurX + 1].aUneUniteeEnemie(uniteCourante);
+	}
+
+	@Override
+	public Etats actionT() {
+		return this;
 	}
 
 }

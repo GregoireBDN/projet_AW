@@ -1,8 +1,6 @@
 /** package principal */
 package main;
 
-import java.security.PublicKey;
-
 import librairies.AssociationTouches;
 import librairies.StdDraw;
 import outil.*;
@@ -18,13 +16,11 @@ public class Jeu {
 	Case[][] grille;
 	Joueur joueur1;
 	Joueur joueur2;
-	private int indexJoueurActif; // l'indice du joueur actif: 1 = rouge, 2 = bleu
-	// l'indice 0 est reserve au neutre, qui ne joue pas mais peut posseder des
-	// proprietes
-
 	public Jeu(String fileName) throws Exception {
 		joueur1 = new Joueur(1);
 		joueur2 = new Joueur(2);
+		joueur1.setAdverse(joueur2);
+		joueur2.setAdverse(joueur1);
 		String[][] carteString = ParseurCartes.parseCarte(fileName);
 		grille = new Case[carteString.length][carteString[0].length];
 		for (int i = 0; i < grille.length; i++) {
@@ -37,7 +33,6 @@ public class Jeu {
 				System.out.println();
 			}
 		}
-		etat = new DeplacementLibre(grille, 0, 0, joueur1);
 		
 
 		for (int i = 0; i < grille.length; i++) {
@@ -51,10 +46,10 @@ public class Jeu {
 			}
 			System.out.println();
 		}
+		
+		etat = new DeplacementLibre(grille, 0, 0, joueur1, true, false);
 
 		Config.setDimension(carteString[0].length, carteString.length);
-
-		indexJoueurActif = 1; // rouge commence
 	}
 
 	public boolean isOver() {
@@ -170,26 +165,26 @@ public class Jeu {
 
 	public void drowUnite(Case courante) {
 		if (courante.getUnite() instanceof Artillerie) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_ARTILLERIE));
+			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins.getCheminUnite(
+					courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_ARTILLERIE));
 		} else if (courante.getUnite() instanceof Bazooka) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_BAZOOKA));
+			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins
+					.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_BAZOOKA));
 		} else if (courante.getUnite() instanceof Bombardier) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_BOMBARDIER));
+			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins.getCheminUnite(
+					courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_BOMBARDIER));
 		} else if (courante.getUnite() instanceof Helicoptere) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_HELICOPTERE));
+			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins.getCheminUnite(
+					courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_HELICOPTERE));
 		} else if (courante.getUnite() instanceof Infanterie) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_INFANTERIE));
+			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins.getCheminUnite(
+					courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_INFANTERIE));
 		} else if (courante.getUnite() instanceof Tank) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_TANK));
+			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins
+					.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_TANK));
 		} else if (courante.getUnite() instanceof Dca) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_ANTIAIR));
+			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins
+					.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_ANTIAIR));
 		}
 	}
 
@@ -279,13 +274,7 @@ public class Jeu {
 		// ATTENTION ! si vous voulez detecter d'autres touches que 't',
 		// vous devez les ajouter au tableau Config.TOUCHES_PERTINENTES_CARACTERES
 		if (toucheSuivante.isCaractere('t')) {
-			String[] options = { "Oui", "Non" };
-			if (Affichage.popup("Finir le tour de XXX?", options, true, 1) == 0) {
-				// le choix 0, "Oui", a été selectionné
-				// TODO: passer au joueur suivant
-				System.out.println("FIN DE TOUR");
-			}
-
+			etat = etat.actionT();
 			display();
 		}
 	}

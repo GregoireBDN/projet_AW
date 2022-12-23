@@ -3,6 +3,7 @@ package outil;
 public class Joueur {
 int indiceJoueur;
 int credit;
+Joueur adverse;
 
 public Joueur() {
 	this.indiceJoueur = 0;
@@ -27,5 +28,17 @@ public int getCredit() {
 
 public void setCredit(int credit) {
 	this.credit = credit;
+}
+
+public Joueur getAdverse() {
+	return adverse;
+}
+
+public void setAdverse(Joueur adverse) {
+	this.adverse = adverse;
+}
+
+public String toString () {
+	return "Joueur : " + getIndiceJoueur();
 }
 }

@@ -14,11 +14,13 @@ public abstract class Unite {
 	Arme a;
 	String[] actions;
 	int deplacement;
+	boolean utiliser;
 
 	public Unite() {
 		this.actions = new String[1];
 		actions[0] = ActionsUnites.attendre.name();
 		this.setPv(10);
+		this.utiliser = false;
 	}
 
 	public double getPv() {
@@ -78,7 +80,7 @@ public abstract class Unite {
 		this.actions = newAction;
 	}
 
-	public void rstAction() {
+	public void resetAction() {
 		this.actions = new String[1];
 		actions[0] = ActionsUnites.attendre.name();
 	}
@@ -102,4 +104,18 @@ public abstract class Unite {
 	public abstract void resetDeplacement();
 
 	public abstract String toString();
+
+	public boolean isUtiliser() {
+		return utiliser;
+	}
+
+	public void setUtiliser(boolean utilise) {
+		this.utiliser = utilise;
+	}
+	
+	public void resetUnite() {
+		resetAction();
+		resetDeplacement();
+		utiliser = false;
+	}	
 }
