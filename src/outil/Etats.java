@@ -1,6 +1,8 @@
 package outil;
 
+import ressources.Affichage;
 import terrain.Propriete;
+import unite.Unite;
 
 public abstract class Etats {
 	int curseurX;
@@ -22,10 +24,16 @@ public abstract class Etats {
 	public abstract Etats  actionEchap();
 	
 	public abstract Etats actionT();
+	
+	public abstract void actionN();
+	
+	public abstract Unite getUnite();
 
 	public int getCurseurX() {
 		return curseurX;
 	}
+	
+	public abstract void drawGameCursorE();
 
 	public void setCurseurX(int curseurX) {
 		this.curseurX = curseurX;

@@ -1,6 +1,7 @@
 package terrain;
 
-import locomoton.Locomotion;
+import locomotion.Locomotion;
+import ressources.Chemins;
 
 public class Plaine extends Terrain{
 
@@ -8,5 +9,11 @@ public class Plaine extends Terrain{
 	public int CoupDeDeplacement(Locomotion l) {
 		return 1;
 	}
+	
+	@Override
+	public String getImage() {
+		return Chemins.FICHIER_PLAINE;
+	}
+	
 
 }

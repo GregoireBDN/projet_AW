@@ -1,16 +1,13 @@
 package terrain;
 
-import locomoton.Locomotion;
+import locomotion.Locomotion;
 import outil.Joueur;
 
-public class Propriete extends Terrain {
+public abstract class Propriete extends Terrain {
 	
 	Joueur joueur;
 	double resistance;
 	
-	public Propriete() {
-		this.resistance = 20;
-	}
 
 	public Joueur getJoueur() {
 		return joueur;
@@ -32,5 +29,7 @@ public class Propriete extends Terrain {
 	public void setResistance(double resistance) {
 		this.resistance = resistance;
 	}
+	
+	public abstract String getImage();
 	
 }

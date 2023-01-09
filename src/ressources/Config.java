@@ -45,7 +45,9 @@ public class Config {
     final protected static Color POPUP_COULEUR_CADRE = new Color(120, 40, 0);
 
     /** Police par defaut, celle du texte au-dessus de la carte */
-    final protected static Font POLICE_PAR_DEFAUT = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
+    public final static Font POLICE_PAR_DEFAUT = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
+    
+    public final static Font POLICE_PV = new Font(Font.SERIF, Font.BOLD, 15);
 
     /** Police du texte de popup */
     final protected static Font POLICE_POPUP = new Font("Arial", Font.BOLD, 16);

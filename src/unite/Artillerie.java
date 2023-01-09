@@ -1,6 +1,7 @@
 package unite;
 
 import outil.Joueur;
+import ressources.Chemins;
 
 public class Artillerie extends Unite {
 	public Artillerie() {
@@ -16,5 +17,10 @@ public class Artillerie extends Unite {
 	@Override
 	public String toString() {
 		return "Artillerie";
+	}
+	
+	@Override
+	public String getImage() {
+		return Chemins.FICHIER_ARTILLERIE;
 	}
 }

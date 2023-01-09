@@ -2,9 +2,10 @@ package unite;
 
 import arme.Missile;
 import arme.MitrailleuseLourde;
-import locomoton.Aerien;
-import locomoton.SurChenilles;
+import locomotion.Aerien;
+import locomotion.SurChenilles;
 import outil.Joueur;
+import ressources.Chemins;
 
 public class Helicoptere extends Unite {
 	public Helicoptere() {
@@ -30,5 +31,10 @@ public class Helicoptere extends Unite {
 	@Override
 	public String toString() {
 		return 	"Helicoptere";
+	}
+	
+	@Override
+	public String getImage() {
+		return Chemins.FICHIER_HELICOPTERE;
 	}
 }

@@ -1,8 +1,9 @@
 package unite;
 
 import arme.MitrailleuseLegere;
-import locomoton.APied;
+import locomotion.APied;
 import outil.Joueur;
+import ressources.Chemins;
 
 public class Infanterie extends Unite {
 	public Infanterie() {
@@ -28,5 +29,10 @@ public class Infanterie extends Unite {
 	@Override
 	public String toString() {
 		return "Infanterie";
+	}
+	
+	@Override
+	public String getImage() {
+		return Chemins.FICHIER_INFANTERIE;
 	}
 }

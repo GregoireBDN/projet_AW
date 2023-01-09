@@ -1,8 +1,9 @@
 package terrain;
 
-import locomoton.APied;
-import locomoton.Aerien;
-import locomoton.Locomotion;
+import locomotion.APied;
+import locomotion.Aerien;
+import locomotion.Locomotion;
+import ressources.Chemins;
 
 public class Montagne extends Terrain {
 
@@ -16,5 +17,12 @@ public class Montagne extends Terrain {
 		}
 		return cout;
 	}
+	
+	
+	@Override
+	public String getImage() {
+		return Chemins.FICHIER_MONTAGNE;
+	}
+	
 
 }

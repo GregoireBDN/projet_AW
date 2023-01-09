@@ -1,8 +1,9 @@
 package unite;
 
 import arme.Bombes;
-import locomoton.Aerien;
+import locomotion.Aerien;
 import outil.Joueur;
+import ressources.Chemins;
 
 public class Bombardier extends Unite {
 	public Bombardier() {
@@ -27,5 +28,10 @@ public class Bombardier extends Unite {
 	@Override
 	public String toString() {
 		return "Bombardier";
+	}
+	
+	@Override
+	public String getImage() {
+		return Chemins.FICHIER_BOMBARDIER;
 	}
 }

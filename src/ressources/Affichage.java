@@ -128,10 +128,19 @@ public class Affichage {
     * @param f Police de l'affichage
     */
    public static void afficheTexteDansCase(int xCase, int yCase, String texte, Color couleur, double xInterne, double yInterne, Font f) {
-        StdDraw.setPenColor(couleur);
+	    StdDraw.setPenColor(couleur);
         StdDraw.setFont(f);
-        StdDraw.text(coordXCentreCase(xCase)+ (xInterne-0.5)*Config.largeurCaseX, coordYCentreCase(yCase)+ (yInterne-0.5)*Config.largeurCaseY, texte);
+        StdDraw.text(coordXCentreCase(xCase)+ (xInterne-0.4)*Config.largeurCaseX, coordYCentreCase(yCase)+ (yInterne-0.4)*Config.largeurCaseY, texte);
+    }
+   public static void afficheTexteDansCase(int xCase, int yCase, String texte, Color couleurTexte,Color couleurBackgroung, double xInterne, double yInterne, Font f) {
+	   afficheCercleDansCase(xCase, yCase, couleurBackgroung, xInterne, yInterne);
+	   afficheTexteDansCase(xCase, yCase, texte, couleurTexte, xInterne, yInterne, f); 
+    }
+   public static void afficheCercleDansCase(int xCase, int yCase,  Color couleur, double xInterne, double yInterne) {
+	   StdDraw.setPenColor(couleur);
+	   StdDraw.filledCircle(coordXCentreCase(xCase)+ (xInterne-0.4)*Config.largeurCaseX, coordYCentreCase(yCase)+ (yInterne-0.4)*Config.largeurCaseY, 0.0150);
     } 
+
 
 /**
  * Affiche une image dans une case, centree au centre de la case.
@@ -161,7 +170,7 @@ public class Affichage {
  * @param x L'indice en abscisse de la case
  * @param y L'indice en ordonnee de la case
  */
-    public static void dessineCurseur(int x, int y) {
+    public static void dessineCurseur(int x, int y, Color couleur) {
         double margeX = 0.1* Config.largeurCaseX; //distance entre curseur et bord de la case
         double margeY = 0.1* Config.largeurCaseY;
         double longueurX = 0.1 * Config.largeurCaseX; // longueur de chaque petite ligne du curseur
@@ -178,11 +187,25 @@ public class Affichage {
                     double debutY = coordYCentreCase(y) + decalageY * (haut - bas);
                     double finX = debutX + longueurX * (horizontal * gauche -droite * horizontal);
                     double finY = debutY + longueurY * (bas * vertical - haut * vertical);
-                    dessineLigne(debutX, debutY, finX, finY, Color.black);
+                    dessineLigne(debutX, debutY, finX, finY, couleur);
                 }
             }
         }
     }
+    
+    public static void dessineCurseurDeplacementLibre(int x, int y) {
+    	dessineCurseur(x, y, Color.BLACK );
+    }
+    
+    public static void dessineCurseurChoisirChemin(int x, int y) {
+    	dessineCurseur(x, y, Color.cyan );
+    }
+    
+    public static void dessineCurseurAttaque(int x, int y) {
+    	dessineCurseur(x, y, Color.red );
+    }
+    
+    
 
 /**
  * Vide la case en affichant la couleur de l'arriere-plan a la place.

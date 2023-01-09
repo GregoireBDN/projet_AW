@@ -2,8 +2,9 @@ package unite;
 
 import arme.Canon;
 import arme.MitrailleuseLourde;
-import locomoton.SurChenilles;
+import locomotion.SurChenilles;
 import outil.Joueur;
+import ressources.Chemins;
 
 public class Tank extends Unite {
 	public Tank() {
@@ -27,5 +28,10 @@ public class Tank extends Unite {
 	@Override
 	public String toString() {
 		return "Tank";
+	}
+	
+	@Override
+	public String getImage() {
+		return Chemins.FICHIER_TANK;
 	}
 }

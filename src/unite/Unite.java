@@ -1,7 +1,7 @@
 package unite;
 
 import arme.*;
-import locomoton.*;
+import locomotion.*;
 import outil.ActionsUnites;
 import outil.Joueur;
 import terrain.Propriete;
@@ -117,5 +117,7 @@ public abstract class Unite {
 		resetAction();
 		resetDeplacement();
 		utiliser = false;
-	}	
+	}
+	
+	public abstract String getImage();
 }

@@ -1,5 +1,10 @@
 package arme;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import outil.Case;
+import outil.Joueur;
 import unite.Bazooka;
 import unite.Bombardier;
 import unite.Dca;
@@ -20,5 +25,22 @@ public class Missile extends Arme {
 			efficacite = 0.7;
 		}
 		return efficacite;
+	}
+	
+	public List<Case> enmisAPorter(Case c, Case[][] grille, Joueur joueur) {
+		List<Case> casesAPorte = new ArrayList<>();
+		if (c.getX() > 0) {
+			ajouteLstAPorter(grille[c.getY()][c.getX() - 1], joueur, casesAPorte);
+		}
+		if (c.getX() < grille[0].length - 1) {
+			ajouteLstAPorter(grille[c.getY()][c.getX() + 1], joueur, casesAPorte);
+		}
+		if (c.getY() > grille.length - 1) {
+			ajouteLstAPorter(grille[c.getY() + 1][c.getX()], joueur, casesAPorte);
+		}
+		if (c.getY() < 0) {
+			ajouteLstAPorter(grille[c.getY() - 1][c.getX()], joueur, casesAPorte);
+		}
+		return casesAPorte;
 	}
 }

@@ -24,6 +24,10 @@ public class DeplacementLibre extends Etats {
 		}
 
 	}
+	
+	public Unite getUnite() {
+		return null;
+	}
 
 	@Override
 	public void actionGauche() {
@@ -160,6 +164,15 @@ public class DeplacementLibre extends Etats {
 			}
 		}
 		return e;
+	}
+
+	@Override
+	public void drawGameCursorE() {
+		Affichage.dessineCurseurDeplacementLibre(getCurseurX(), getCurseurY()); // affiche le curseur en (0,0), a modifier
+	}
+
+	@Override
+	public void actionN() {
 	}
 
 }

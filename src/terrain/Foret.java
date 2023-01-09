@@ -1,7 +1,8 @@
 package terrain;
 
-import locomoton.Locomotion;
-import locomoton.SurChenilles;
+import locomotion.Locomotion;
+import locomotion.SurChenilles;
+import ressources.Chemins;
 
 public class Foret extends Terrain {
 
@@ -15,5 +16,11 @@ public class Foret extends Terrain {
 		}
 		return cout;
 	}
+	
+	@Override
+	public String getImage() {
+		return Chemins.FICHIER_FORET;
+	}
+	
 
 }

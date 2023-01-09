@@ -1,5 +1,5 @@
 package outil;
 
 public enum ActionsUnites {
-	attendre,attaque, capture
+	attendre, attaque, capture
 }

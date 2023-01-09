@@ -1,5 +1,11 @@
 package terrain;
 
-public class Ville extends Propriete {
+import ressources.Chemins;
 
+public class Ville extends Propriete {
+	@Override
+	public String getImage() {
+		return Chemins.FICHIER_VILLE;
+	}
+	
 }

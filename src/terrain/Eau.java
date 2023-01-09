@@ -1,7 +1,8 @@
 package terrain;
 
-import locomoton.Aerien;
-import locomoton.Locomotion;
+import locomotion.Aerien;
+import locomotion.Locomotion;
+import ressources.Chemins;
 
 public class Eau extends Terrain{
 
@@ -12,4 +13,11 @@ public class Eau extends Terrain{
 			cout = 1;
 		}return cout;
 	}
+
+	@Override
+	public String getImage() {
+		return Chemins.FICHIER_EAU;
+	}
+	
+	
 }

@@ -1,6 +1,8 @@
 /** package principal */
 package main;
 
+import java.awt.Color;
+
 import librairies.AssociationTouches;
 import librairies.StdDraw;
 import outil.*;
@@ -35,10 +37,10 @@ public class Jeu {
 			}
 		}
 
-		for (int i = 0; i < grille.length; i++) {
-			for (int j = 0; j < grille[0].length; j++) {
-				System.out.print(grille[i][j]);
-				if (j != grille[0].length) {
+		for (int i = 0; i < carteString.length; i++) {
+			for (int j = 0; j < carteString[0].length; j++) {
+				System.out.print(carteString[i][j]);
+				if (j != carteString[0].length) {
 					System.out.print(" | ");
 				} else {
 					System.out.println();
@@ -57,8 +59,12 @@ public class Jeu {
 	}
 
 	public void afficheStatutJeu() {
-		Affichage.videZoneTexte();
-		Affichage.afficheTexteDescriptif("Status du jeu");
+		Affichage.afficheTexteDescriptif("Joueur " + joueur1.getIndiceJoueur());
+		if (!(etat instanceof DeplacementLibre)) {
+			Affichage.videZoneTexte();
+			Affichage.afficheTexteDescriptif(etat.getUnite().toString() + "   |   PV : "
+					+ etat.getUnite().getPv() + "   Deplacement : " + etat.getUnite().getDeplacement());
+		}
 	}
 
 	public Joueur stringToJoueur(String info) {
@@ -74,9 +80,10 @@ public class Jeu {
 	public void associeUnite(Case courante, String info, Joueur joueur) {
 		switch (info) {
 		case "Artillerie":
+
 			break;
 		case "Bazooka":
-			courante.setUnite(new Artillerie());
+			courante.setUnite(new Bazooka());
 			courante.getUnite().setJoueur(joueur);
 			break;
 		case "Bombardier":
@@ -187,79 +194,12 @@ public class Jeu {
 
 	}
 
-	public void drowFleche(Case courante) {
-		if (courante.getFleche().getDepart() != null) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminFleche(courante.getFleche().getDepart(), courante.getFleche().getArriver()));
-		}
-	}
-
-	public void drowUnite(Case courante) {
-		if (courante.getUnite() instanceof Artillerie) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins.getCheminUnite(
-					courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_ARTILLERIE));
-		} else if (courante.getUnite() instanceof Bazooka) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins
-					.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_BAZOOKA));
-		} else if (courante.getUnite() instanceof Bombardier) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins.getCheminUnite(
-					courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_BOMBARDIER));
-		} else if (courante.getUnite() instanceof Helicoptere) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins.getCheminUnite(
-					courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_HELICOPTERE));
-		} else if (courante.getUnite() instanceof Infanterie) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins.getCheminUnite(
-					courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_INFANTERIE));
-		} else if (courante.getUnite() instanceof Tank) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins
-					.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_TANK));
-		} else if (courante.getUnite() instanceof Dca) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(), Chemins
-					.getCheminUnite(courante.getUnite().getJoueur().getIndiceJoueur(), true, Chemins.FICHIER_ANTIAIR));
-		}
+	public void drawGameCursor() {
+		etat.drawGameCursorE();
 	}
 
 	public void drowCases(Case courante) {
-		if (courante.getTerrain() instanceof Eau) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminTerrain(Chemins.FICHIER_EAU));
-			drowUnite(courante);
-			drowFleche(courante);
-		} else if (courante.getTerrain() instanceof Foret) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminTerrain(Chemins.FICHIER_FORET));
-			drowUnite(courante);
-			drowFleche(courante);
-		} else if (courante.getTerrain() instanceof Montagne) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminTerrain(Chemins.FICHIER_MONTAGNE));
-			drowUnite(courante);
-			drowFleche(courante);
-		} else if (courante.getTerrain() instanceof Plaine) {
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminTerrain(Chemins.FICHIER_PLAINE));
-			drowUnite(courante);
-			drowFleche(courante);
-		} else if (courante.getTerrain() instanceof Qg) {
-			Propriete p = (Propriete) courante.getTerrain();
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminPropriete(Chemins.FICHIER_QG, p.getJoueur().getIndiceJoueur()));
-			drowUnite(courante);
-			drowFleche(courante);
-		} else if (courante.getTerrain() instanceof Usine) {
-			Propriete p = (Propriete) courante.getTerrain();
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminPropriete(Chemins.FICHIER_USINE, p.getJoueur().getIndiceJoueur()));
-			drowUnite(courante);
-			drowFleche(courante);
-		} else if (courante.getTerrain() instanceof Ville) {
-			Propriete p = (Propriete) courante.getTerrain();
-			Affichage.dessineImageDansCase(courante.getX(), courante.getY(),
-					Chemins.getCheminPropriete(Chemins.FICHIER_VILLE, p.getJoueur().getIndiceJoueur()));
-			drowUnite(courante);
-			drowFleche(courante);
-		}
-
+		courante.drowCase();
 	}
 
 	public void initialDisplay() {
@@ -268,11 +208,8 @@ public class Jeu {
 		display();
 	}
 
-	public void drawGameCursor() {
-		Affichage.dessineCurseur(etat.getCurseurX(), etat.getCurseurY()); // affiche le curseur en (0,0), a modifier
-	}
-
 	public void update() {
+
 		AssociationTouches toucheSuivante = AssociationTouches.trouveProchaineEntree(); // cette fonction boucle jusqu'a
 																						// la prochaine entree de
 																						// l'utilisateur
@@ -305,6 +242,11 @@ public class Jeu {
 		// ATTENTION ! si vous voulez detecter d'autres touches que 't',
 		// vous devez les ajouter au tableau Config.TOUCHES_PERTINENTES_CARACTERES
 		if (toucheSuivante.isCaractere('t')) {
+			etat = etat.actionT();
+			display();
+		}
+
+		if (toucheSuivante.isCaractere('n')) {
 			etat = etat.actionT();
 			display();
 		}

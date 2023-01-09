@@ -2,9 +2,10 @@ package unite;
 
 import arme.Bombes;
 import arme.MitrailleuseLourde;
-import locomoton.Aerien;
-import locomoton.SurChenilles;
+import locomotion.Aerien;
+import locomotion.SurChenilles;
 import outil.Joueur;
+import ressources.Chemins;
 
 public class Dca extends Unite {
 	public Dca() {
@@ -29,7 +30,11 @@ public class Dca extends Unite {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return "Dca";
+	}
+	
+	@Override
+	public String getImage() {
+		return Chemins.FICHIER_ANTIAIR;
 	}
 }

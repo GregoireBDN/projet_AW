@@ -1,7 +1,8 @@
 package unite;
 import arme.*;
-import locomoton.APied;
+import locomotion.APied;
 import outil.Joueur;
+import ressources.Chemins;
 public class Bazooka extends Unite {
 	public Bazooka() {
 		this.a = new Canon();
@@ -26,6 +27,11 @@ public class Bazooka extends Unite {
 	@Override
 	public String toString() {
 		return "Bazooka";
+	}
+	
+	@Override
+	public String getImage() {
+		return Chemins.FICHIER_BAZOOKA;
 	}
 	
 	
