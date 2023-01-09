@@ -10,20 +10,19 @@ public class Attaque extends Etats {
 	int curseurXMemo;
 	int curseurYMemo;
 	List<Case> lstCase;
-	int IndCaseCourante;
+	int idxLstCase;
 
 	public Attaque(Case[][] grille, int x, int y, Unite u, Joueur joueur, boolean isOver, List<Case> lstCase) {
 		this.isOver = isOver;
-//		this.joueur = joueur;
-		this.IndCaseCourante = 0;
+		this.joueur = joueur;
+		this.idxLstCase = 0;
 		this.curseurXMemo = x;
 		this.curseurYMemo = y;
 		this.uniteCourante = u;
 		this.grille = grille;
 		this.lstCase = lstCase;
-		this.curseurY = lstCase.get(IndCaseCourante).getY();
-		this.curseurX = lstCase.get(IndCaseCourante).getX();;
-		;
+		this.curseurY = lstCase.get(idxLstCase).getY();
+		this.curseurX = lstCase.get(idxLstCase).getX();
 	}
 	
 	public Unite getUnite() {
@@ -31,46 +30,34 @@ public class Attaque extends Etats {
 	}
 	
 	public void changementCible() {
-		if(lstCase.size() < IndCaseCourante) {
-			IndCaseCourante += 1;
-			curseurY = lstCase.get(IndCaseCourante).getY();
-			curseurX = lstCase.get(IndCaseCourante).getX();
+		if(idxLstCase < lstCase.size() - 1) {
+			idxLstCase += 1;
+			curseurY = lstCase.get(idxLstCase).getY();
+			curseurX = lstCase.get(idxLstCase).getX();
 		}else {
-			IndCaseCourante = 0;
-			curseurY = lstCase.get(IndCaseCourante).getY();
-			curseurX = lstCase.get(IndCaseCourante).getX();
+			idxLstCase = 0;
+			curseurY = lstCase.get(idxLstCase).getY();
+			curseurX = lstCase.get(idxLstCase).getX();
 		}
 	}
 
 	@Override
 	public void actionGauche() {
-//		if (curseurX > 0 && curseurX >= curseurXMemo && curseurY == curseurYMemo) {
-//			curseurX--;
-//		}
 		changementCible();
 	}
 
 	@Override
 	public void actionDroit() {
-//		if (curseurX < grille[0].length - 1 && curseurX <= curseurXMemo && curseurY == curseurYMemo) {
-//			curseurX++;
-//		} 
 		changementCible();
 	}
 
 	@Override
 	public void actionBas() {
-//		if (curseurY > 0 && curseurY >= curseurYMemo && curseurX == curseurXMemo) {
-//			curseurY--;
-//		}
 		changementCible();
 	}
 
 	@Override
 	public void actionHaut() {
-//		if (curseurY < grille.length - 1 && curseurY <= curseurYMemo && curseurX == curseurXMemo) {
-//			curseurY++;
-//		}
 		changementCible();
 	}
 
@@ -83,14 +70,18 @@ public class Attaque extends Etats {
 				uniteCourante.setPv(grille[curseurY][curseurX].unite.infligeDegat(uniteCourante));
 				estMort(uniteCourante);
 			}
-			e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur, false, false);
+			if(lstUniteUtilisable().isEmpty()) {
+				e = new DeplacementLibre(grille, 0, 0, joueur.getAdverse(), true, isOver);
+			}else {
+				e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur, false, isOver);
+			}
 		}
 		return e;
 	}
 
 	@Override
 	public Etats actionEchap() {
-		return new DeplacementLibre(grille, curseurX, curseurY, joueur, false, false);
+		return new DeplacementLibre(grille, curseurX, curseurY, joueur, false, isOver);
 	}
 
 	public boolean estMort(Unite uniteCoutante) {

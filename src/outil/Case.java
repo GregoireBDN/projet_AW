@@ -7,7 +7,6 @@ import ressources.Chemins;
 import ressources.Config;
 import terrain.Propriete;
 import terrain.Terrain;
-import unite.Artillerie;
 import unite.Unite;
 
 public class Case {

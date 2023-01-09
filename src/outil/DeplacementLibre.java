@@ -1,12 +1,16 @@
 package outil;
 
+import java.util.List;
+
 import ressources.*;
 import terrain.*;
 import unite.*;
 
 public class DeplacementLibre extends Etats {
+	int idxLstUniteUtil;
 
 	public DeplacementLibre(Case[][] grille, int x, int y, Joueur joueur, boolean newTours, boolean isOver) {
+		this.idxLstUniteUtil = 0;
 		this.joueur = joueur;
 		this.curseurX = x;
 		this.curseurY = y;
@@ -60,12 +64,13 @@ public class DeplacementLibre extends Etats {
 
 	public Etats actionEnter() {
 		Etats e = this;
+		Case caseCourante = grille[curseurY][curseurX];
 		if (!isOver) {
-			if (grille[curseurY][curseurX].unite != null && grille[curseurY][curseurX].unite.getJoueur().equals(joueur)
-					&& !grille[curseurY][curseurX].unite.isUtiliser()) {
-				e = new ChoisirChemin(grille, curseurX, curseurY, grille[curseurY][curseurX].unite, joueur, isOver);
-			} else if (grille[curseurY][curseurX].terrain instanceof Usine && !grille[curseurY][curseurX].aUneUnite()) {
-				Propriete propriete = (Propriete) grille[curseurY][curseurX].terrain;
+			if (caseCourante.getUnite() != null && caseCourante.getUnite().getJoueur().equals(joueur)
+					&& !caseCourante.getUnite().isUtiliser()) {
+				e = new ChoisirChemin(grille, curseurX, curseurY, caseCourante.unite, joueur, isOver);
+			} else if (caseCourante.terrain instanceof Usine && !caseCourante.aUneUnite()) {
+				Propriete propriete = (Propriete) caseCourante.terrain;
 				if (propriete.getJoueur().equals(joueur)) {
 					String[] option = new String[EnumUnites.getUnites().length];
 					int i = 0;
@@ -173,6 +178,18 @@ public class DeplacementLibre extends Etats {
 
 	@Override
 	public void actionN() {
+		List<Case> lstCaseUnite = lstUniteUtilisable();
+		if(!lstCaseUnite.isEmpty()) {
+			if(idxLstUniteUtil < lstCaseUnite.size() - 1) {
+				idxLstUniteUtil += 1;
+				curseurY = lstCaseUnite.get(idxLstUniteUtil).getY();
+				curseurX = lstCaseUnite.get(idxLstUniteUtil).getX();
+			}else {
+				idxLstUniteUtil = 0;
+				curseurY = lstCaseUnite.get(idxLstUniteUtil).getY();
+				curseurX = lstCaseUnite.get(idxLstUniteUtil).getX();
+			}
+		}
 	}
 
 }

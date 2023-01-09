@@ -33,6 +33,4 @@ public class Bazooka extends Unite {
 	public String getImage() {
 		return Chemins.FICHIER_BAZOOKA;
 	}
-	
-	
 }

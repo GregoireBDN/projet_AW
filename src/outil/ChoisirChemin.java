@@ -1,5 +1,6 @@
 package outil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import locomotion.*;
@@ -24,15 +25,39 @@ public class ChoisirChemin extends Etats {
 		this.grille = grille;
 		uniteCourante.setUtiliser(true);
 		grille[curseurY][curseurX].setFleche(new ElementFleche("begin", "end", null));
+		for (Case c : deplacementPossible()) {
+			Affichage.dessineRectangDansCase(c.x, y);
+		}
 	}
 
 	public Unite getUnite() {
 		return uniteCourante;
 	}
 
+	public void action(Case courant, Case courantSuivant, directionFleche d) {
+		if (courantSuivant.estAccecible(uniteCourante)) {
+			if (!courant.fleche.getDepart().equals(d.name())) {
+				courant.fleche.setArriver(d.name());
+			}
+			courantSuivant.getFleche().setPrecedent(courant.getFleche());
+			courant.setX(courant.getX() - 1);
+			;
+			courant.decreDeplacement(uniteCourante);
+			courant.fleche.setDepart(d.oppose);
+			courant.fleche.setArriver("end");
+		} else if (courant.getFleche().getPrecedent().equals(courantSuivant.getFleche())) {
+			courant.setFleche(new ElementFleche());
+			courant.setX(courant.getX() - 1);
+			;
+			;
+			courant.inecDeplacement(uniteCourante);
+			courant.getFleche().setArriver("end");
+		}
+	}
+
 	@Override
 	public void actionGauche() {
-		if (curseurX > 0) {
+		if (controlPosCursMinMaxX()) {
 			if (grille[curseurY][curseurX - 1].estAccecible(uniteCourante)) {
 				if (!grille[curseurY][curseurX].fleche.getDepart().equals("left")) {
 					grille[curseurY][curseurX].fleche.setArriver("left");
@@ -54,8 +79,8 @@ public class ChoisirChemin extends Etats {
 
 	@Override
 	public void actionDroit() {
-		if (curseurX < grille[0].length - 1) {
-			if (curseurX < grille[0].length - 1 && grille[curseurY][curseurX + 1].estAccecible(uniteCourante)) {
+		if (controlPosCursMinMaxX()) {
+			if (controlPosCursMinMaxX() && grille[curseurY][curseurX + 1].estAccecible(uniteCourante)) {
 				if (!grille[curseurY][curseurX].fleche.getDepart().equals("right")) {
 					grille[curseurY][curseurX].fleche.setArriver("right");
 				}
@@ -76,7 +101,7 @@ public class ChoisirChemin extends Etats {
 
 	@Override
 	public void actionBas() {
-		if (curseurY > 0) {
+		if (controlPosCursMinMaxY()) {
 			if (grille[curseurY - 1][curseurX].estAccecible(uniteCourante)) {
 				if (!grille[curseurY][curseurX].fleche.getDepart().equals("down")) {
 					grille[curseurY][curseurX].fleche.setArriver("down");
@@ -99,9 +124,8 @@ public class ChoisirChemin extends Etats {
 
 	@Override
 	public void actionHaut() {
-		if (curseurY < grille.length - 1) {
+		if (controlPosCursMinMaxY()) {
 			if (grille[curseurY + 1][curseurX].estAccecible(uniteCourante)) {
-				System.out.println("Touche HAUT");
 				if (!grille[curseurY][curseurX].fleche.getDepart().equals("up")) {
 					grille[curseurY][curseurX].fleche.setArriver("up");
 				}
@@ -159,7 +183,11 @@ public class ChoisirChemin extends Etats {
 				uniteCourante.resetUnite();
 				grille[curseurYMemo][curseurXMemo].setUnite(uniteCourante);
 				grille[curseurY][curseurX].setUnite(null);
-				e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur, false, isOver);
+				if (lstUniteUtilisable().isEmpty()) {
+					e = new DeplacementLibre(grille, 0, 0, joueur.getAdverse(), true, isOver);
+				} else {
+					e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur, false, isOver);
+				}
 			} else if (action > 0) {
 				if (actionsCourante[action].equals(ActionsUnites.attaque.name())) {
 					e = new Attaque(grille, curseurX, curseurY, uniteCourante, joueur, isOver, lstEnmisAPorter);
@@ -175,11 +203,19 @@ public class ChoisirChemin extends Etats {
 							System.out.println("Partie terminé! Le Joueur " + joueur.getIndiceJoueur() + " à gagné!");
 						}
 					}
-					e = new DeplacementLibre(grille, curseurX, curseurY, joueur, false, isOver);
+					if (lstUniteUtilisable().isEmpty()) {
+						e = new DeplacementLibre(grille, 0, 0, joueur.getAdverse(), true, isOver);
+					} else {
+						e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur, false, isOver);
+					}
 				}
 
 			} else {
-				e = new DeplacementLibre(grille, curseurX, curseurY, joueur, false, isOver);
+				if (lstUniteUtilisable().isEmpty()) {
+					e = new DeplacementLibre(grille, 0, 0, joueur.getAdverse(), true, isOver);
+				} else {
+					e = new DeplacementLibre(grille, curseurXMemo, curseurYMemo, joueur, false, isOver);
+				}
 			}
 		} else {
 			e = this;
@@ -195,13 +231,36 @@ public class ChoisirChemin extends Etats {
 				&& propriete.getJoueur() != uniteCourante.getJoueur();
 	}
 
-//	public boolean ennemisAPorter() {
-//		return curseurY > 0 && grille[curseurY - 1][curseurX].aUneUniteeEnemie(uniteCourante)
-//				|| curseurY < grille.length - 1 && grille[curseurY + 1][curseurX].aUneUniteeEnemie(uniteCourante)
-//				|| curseurX > 0 && grille[curseurY][curseurX - 1].aUneUniteeEnemie(uniteCourante)
-//				|| curseurX < grille[curseurY].length - 1
-//						&& grille[curseurY][curseurX + 1].aUneUniteeEnemie(uniteCourante);
-//	}
+	public List<Case> deplacementPossible() {
+		List<Case> lst = new ArrayList<>();
+		deplacementPossibleRec(lst, grille[curseurY][curseurX], uniteCourante.getDeplacement());
+		return lst;
+	}
+
+	public void deplacementPossibleRec(List<Case> lst, Case courante, int deplacement) {
+		if (!lst.contains(courante)) {
+			lst.add(courante);
+		}
+		if (deplacement != 0) {
+			if (controlPosCursMinMaxY()) {
+				deplacementPossibleRec(lst, grille[curseurY + 1][curseurX], deplacement - 1);
+				deplacementPossibleRec(lst, grille[curseurY - 1][curseurX], deplacement - 1);
+			}
+			if (controlPosCursMinMaxX()) {
+				deplacementPossibleRec(lst, grille[curseurY][curseurX + 1], deplacement - 1);
+				deplacementPossibleRec(lst, grille[curseurY][curseurX - 1], deplacement - 1);
+			}
+		}
+
+	}
+
+	private boolean controlPosCursMinMaxX() {
+		return curseurX < grille[0].length - 1 || curseurX > 0;
+	}
+
+	private boolean controlPosCursMinMaxY() {
+		return curseurY < grille.length - 1 || curseurY > 0;
+	}
 
 	@Override
 	public Etats actionT() {

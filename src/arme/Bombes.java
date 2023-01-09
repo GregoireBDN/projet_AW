@@ -23,19 +23,19 @@ public class Bombes extends Arme {
 		return efficacite;
 	}
 	@Override
-	public List<Case> enmisAPorter(Case c, Case[][] grille, Joueur joueur) {
+	public List<Case> enmisAPorter(Case caseCourante, Case[][] grille, Joueur joueur) {
 		List<Case> casesAPorte = new ArrayList<>();
-		if (c.getX() > 0) {
-			ajouteLstAPorter(grille[c.getY()][c.getX() - 1], joueur, casesAPorte);
+		if (caseCourante.getX() > 0) {
+			ajouteLstAPorter(grille[caseCourante.getY()][caseCourante.getX() - 1], joueur, casesAPorte);
 		}
-		if (c.getX() < grille[0].length - 1) {
-			ajouteLstAPorter(grille[c.getY()][c.getX() + 1], joueur, casesAPorte);
+		if (caseCourante.getX() < grille[0].length - 1) {
+			ajouteLstAPorter(grille[caseCourante.getY()][caseCourante.getX() + 1], joueur, casesAPorte);
 		}
-		if (c.getY() < grille.length - 1) {
-			ajouteLstAPorter(grille[c.getY() + 1][c.getX()], joueur, casesAPorte);
+		if (caseCourante.getY() < grille.length - 1) {
+			ajouteLstAPorter(grille[caseCourante.getY() + 1][caseCourante.getX()], joueur, casesAPorte);
 		}
-		if (c.getY() > 0) {
-			ajouteLstAPorter(grille[c.getY() - 1][c.getX()], joueur, casesAPorte);
+		if (caseCourante.getY() > 0) {
+			ajouteLstAPorter(grille[caseCourante.getY() - 1][caseCourante.getX()], joueur, casesAPorte);
 		}
 		return casesAPorte;
 	}

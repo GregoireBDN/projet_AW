@@ -59,11 +59,11 @@ public class Jeu {
 	}
 
 	public void afficheStatutJeu() {
-		Affichage.afficheTexteDescriptif("Joueur " + joueur1.getIndiceJoueur());
+		Affichage.afficheTexteDescriptif("Joueur " + etat.getJoueur().getIndiceJoueur() + " | Credit : " + etat.getJoueur().getCredit());
 		if (!(etat instanceof DeplacementLibre)) {
 			Affichage.videZoneTexte();
-			Affichage.afficheTexteDescriptif(etat.getUnite().toString() + "   |   PV : "
-					+ etat.getUnite().getPv() + "   Deplacement : " + etat.getUnite().getDeplacement());
+			Affichage.afficheTexteDescriptif(etat.getUnite().toString() + "   |   PV : " + etat.getUnite().getPv()
+					+ "   Deplacement : " + etat.getUnite().getDeplacement());
 		}
 	}
 
@@ -80,7 +80,8 @@ public class Jeu {
 	public void associeUnite(Case courante, String info, Joueur joueur) {
 		switch (info) {
 		case "Artillerie":
-
+			courante.setUnite(new Artillerie());
+			courante.getUnite().setJoueur(joueur);
 			break;
 		case "Bazooka":
 			courante.setUnite(new Bazooka());
@@ -247,7 +248,7 @@ public class Jeu {
 		}
 
 		if (toucheSuivante.isCaractere('n')) {
-			etat = etat.actionT();
+			etat.actionN();
 			display();
 		}
 	}

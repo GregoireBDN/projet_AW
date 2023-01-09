@@ -14,7 +14,7 @@ public class Config {
  	La liste des caracteres pertinents; rajoutez ici des caracteres si vous voulez qu'ils soient detectes
  	Vous pouvez ensuite detecter l'appuie sur votre nouvelle touche avec la methode AssociationTouches.isCaractere
  	*/
-    public static final char[] TOUCHES_PERTINENTES_CARACTERES = {'t'};
+    public static final char[] TOUCHES_PERTINENTES_CARACTERES = {'t', 'n'};
 	
 	
     /** Couleur de l'arriere plan du jeu, utile pour effacer  */
@@ -54,6 +54,8 @@ public class Config {
 
     /** Couleur du texte dans la fenetre de popup */
     final protected static Color POPUP_COULEUR_TEXTE = new Color(0,0,0);
+    
+    final protected static Color COULEUR_DEPLACEMENTS_POSSIBLE = new Color(0,255,0,160);
 
    
    /** Nombre de colonnes de la carte */
